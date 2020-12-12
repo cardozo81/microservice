@@ -4,16 +4,14 @@ import com.application.microservice.domain.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Mapper(componentModel = "spring", uses = {UserMapper.class})
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mappings({
         @Mapping(source = "id", target = "idUser"),
@@ -23,9 +21,11 @@ public interface UserMapper {
     UserDTO toDTO(User source);
 
     default List<UserDTO> toDTOList(List<User> userList){
-        if(userList == null){
-            return new ArrayList<UserDTO>();
-        }
         return userList.stream().map(this::toDTO).collect(Collectors.toList());
     }
+
+    default Page<UserDTO> toDTOList(Page<User> userList){
+        return userList.map(this::toDTO);
+    }
+
 }

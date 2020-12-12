@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "user")
+@Table(name = "user", schema = "public")
 public class User {
 
     @Column(name = "id", unique = true, nullable = false)
