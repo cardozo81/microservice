@@ -6,13 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Long idUser;
 
@@ -20,4 +21,6 @@ public class UserDTO {
     private String username;
 
     private Timestamp created;
+
+    private Integer idUserStatus;
 }

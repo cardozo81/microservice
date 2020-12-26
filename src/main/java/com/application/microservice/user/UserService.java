@@ -21,11 +21,17 @@ public class UserService {
         return user.getId();
     }
 
+    public Long deleteById(Long id){
+        userRepository.deleteById(id);
+        return id;
+    }
+
+
     public List<UserDTO> listAll(){
-        return userMapper.toDTOList(userRepository.findAllBy());
+        return userMapper.toDTOList(userRepository.findAll());
     }
 
     public Page<UserDTO> listAll(Pageable pageable){
-        return userMapper.toDTOList(userRepository.findAllBy(pageable));
+        return userMapper.toDTOList(userRepository.findAll(pageable));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,23 +18,38 @@ public class UserResource {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping
     public Long create(@RequestBody UserDTO userDTO){
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setIdUserStatus(1);
-        userService.execute(user);
-        return user.getId();
+        return userService.execute(user);
+        //return userRepository.save(user).getId();
     }
 
-    @DeleteMapping
-    public Long delete(@RequestBody UserDTO userDTO){
-        return null;
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<?> delete(@PathVariable("id") Long idUser){
+        return userRepository.findById(idUser)
+                .map(record -> {
+                    //userRepository.deleteById(idUser);
+                    userService.deleteById(idUser);
+                    return ResponseEntity.ok().build();
+                }).orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping
-    public Long update(@RequestBody UserDTO userDTO){
-        return null;
+    @PutMapping(path = {"/{id}"})
+    public ResponseEntity update(@PathVariable("id") Long idUser, @RequestBody UserDTO userDTO){
+        return userRepository.findById(idUser)
+                .map(record -> {
+                    record.setUsername(userDTO.getUsername());
+                    record.setIdUserStatus(userDTO.getIdUserStatus());
+                    //User updated = userRepository.save(record);
+                    Long updated = userService.execute(record);
+                    return ResponseEntity.ok().body(updated);
+                }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/list")

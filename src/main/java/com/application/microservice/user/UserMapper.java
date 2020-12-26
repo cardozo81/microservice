@@ -14,8 +14,9 @@ import java.util.stream.Collectors;
 public interface UserMapper {
 
     @Mappings({
-        @Mapping(source = "id", target = "idUser"),
-        @Mapping(source = "username", target = "username")
+            @Mapping(source = "id", target = "idUser")
+            , @Mapping(source = "username", target = "username")
+            , @Mapping(source = "idUserStatus", target = "idUserStatus")
     })
 
     UserDTO toDTO(User source);
